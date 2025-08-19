@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 interface ToastProps {
   message: string;
@@ -8,12 +8,30 @@ interface ToastProps {
 }
 
 const Toast: React.FC<ToastProps> = ({ message, success, isOpen, onClose }) => {
+  const toastRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (isOpen) {
+      // Auto-close after 3 seconds
       const timer = setTimeout(() => {
         onClose();
-      }, 3000);
-      return () => clearTimeout(timer);
+      }, 2000);
+
+      // Handle outside clicks
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          toastRef.current &&
+          !toastRef.current.contains(event.target as Node)
+        ) {
+          onClose();
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        clearTimeout(timer);
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
     }
   }, [isOpen, onClose]);
 
@@ -21,7 +39,8 @@ const Toast: React.FC<ToastProps> = ({ message, success, isOpen, onClose }) => {
 
   return (
     <div
-      className={`fixed top-4 right-4 max-w-xs w-full p-4 rounded-lg shadow-lg transition-all duration-300 ${
+      ref={toastRef}
+      className={`fixed top-1 right-1 max-w-xs w-full z-50 p-4 rounded-lg shadow-lg transition-all duration-300 ${
         success ? "bg-green-500 text-white" : "bg-red-500 text-white"
       } animate-slide-in`}
     >

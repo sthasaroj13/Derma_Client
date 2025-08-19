@@ -20,7 +20,7 @@ const InputField = forwardRef<HTMLInputElement, InputProps>(
         onClick={onClick}
         value={value}
         placeholder={placeholder}
-        className={`border border-gray-300 px-3 py-2 rounded-md focus:outline-none  ${className}`}
+        className={`border border-gray-300 px-3 py-2 rounded-[.625rem]  focus:outline-orange-300  ${className}`}
         name={name}
       />
     );

@@ -1,50 +1,61 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Loader2 } from "lucide-react";
+import InputField from "../Component/InputField";
+import Toast from "../Component/Toster";
+import { useContactUserMutation } from "../query/server/ContactSlice";
+import type { ContactForm } from "../Types/contact";
 
-const Contact: React.FC = () => {
+const Contact = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactForm>({
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
   });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [toastState, setToastState] = useState<{
+    isOpen: boolean;
+    message: string;
+    success: boolean;
+  }>({
+    isOpen: false,
+    message: "",
+    success: false,
+  });
+  const [contactApi, { isLoading }] = useContactUserMutation();
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError("");
-    setSuccess("");
+  const showToast = (message: string, success: boolean) => {
+    setToastState({ isOpen: true, message, success });
+  };
+  const closeToast = () => {
+    setToastState({ isOpen: false, message: "", success: false });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSuccess("");
-
+  const onSubmit = async (data: ContactForm) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/contact",
-        formData
-      );
-      setSuccess(response.data.message);
-      setFormData({ name: "", email: "", message: "" });
-      setTimeout(() => navigate("/"), 2000);
+      const response = await contactApi(data).unwrap();
+      if (response.success) {
+        showToast(response.message, true);
+        reset();
+      }
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Failed to send message");
-    } finally {
-      setLoading(false);
+      console.error("Login failed:", err);
+      const errorMessage =
+        err.data?.message || "Login failed. Please check your credentials.";
+      showToast(errorMessage, false);
     }
   };
 
   return (
-    <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gray-100">
       {/* Get In Touch Section */}
       <div className="max-w-4xl mx-auto text-center mb-12">
         <h1 className="text-4xl font-bold text-orange-600 mb-4">
@@ -59,52 +70,35 @@ const Contact: React.FC = () => {
 
       {/* Contact Cards */}
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center  items-center gap-4">
+        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center items-center gap-4">
+          <Mail className="text-orange-500" size={24} />
           <div>
-            <div className=" pl-[3.5rem]">
-              <Mail className="text-orange-500 text-center " size={24} />
-            </div>
-            <div>
-              <h3 className="text-[16px] font-semibold text-gray-800 text-center">
-                Email Us
-              </h3>
-              <p className="text-gray-600 text-[14px] text-center">
-                dermaai44@gmail.com
-              </p>
-            </div>
+            <h3 className="text-xl font-semibold text-gray-800 text-center">
+              Email Us
+            </h3>
+            <p className="text-gray-600 text-sm">dermaai44@gmail.com</p>
           </div>
         </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center  items-center gap-4">
+        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center items-center gap-4">
+          <Phone className="text-orange-500" size={24} />
           <div>
-            <div className=" pl-[2.5rem]">
-              <Phone className="text-orange-500" size={24} />
-            </div>
-            <div>
-              <h3 className="text-[16px] font-semibold text-gray-800 text-center">
-                Call Us
-              </h3>
-              <p className="text-gray-600  text-[14px]">+977-1-1234567</p>
-            </div>
+            <h3 className="text-xl font-semibold text-gray-800 text-center">
+              Call Us
+            </h3>
+            <p className="text-gray-600 text-sm">+977-1-1234567</p>
           </div>
         </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center  items-center gap-4">
+        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center items-center gap-4">
+          <MapPin className="text-orange-500" size={24} />
           <div>
-            <div className=" pl-[5rem]">
-              <MapPin className="text-orange-500" size={24} />
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold text-gray-800 text-center">
-                Visit Us
-              </h3>
-              <p className="text-gray-600 mt-1">
-                <Clock className="inline mr-2 text-[12px]" size={16} />
-                <span className=" text-[.75rem]">
-                  Sunday to Friday, 10 AM - 5 PM
-                </span>
-              </p>
-            </div>
+            <h3 className="text-xl font-semibold text-gray-800 text-center">
+              Visit Us
+            </h3>
+            <p className="text-gray-600 text-sm">Kathmandu, Nepal</p>
+            <p className="text-gray-600 text-sm mt-1">
+              <Clock className="inline mr-2" size={16} />
+              Sunday to Friday, 10 AM - 5 PM
+            </p>
           </div>
         </div>
       </div>
@@ -114,7 +108,7 @@ const Contact: React.FC = () => {
         <h2 className="text-2xl font-bold text-orange-600 text-center mb-6">
           Send Us a Message
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label
               htmlFor="name"
@@ -122,16 +116,24 @@ const Contact: React.FC = () => {
             >
               Name
             </label>
-            <input
+            <InputField
+              {...register("name", {
+                required: "Name is required",
+                minLength: {
+                  value: 2,
+                  message: "Name must be at least 2 characters",
+                },
+              })}
               type="text"
               name="name"
-              id="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
               placeholder="Your Name"
+              className={`mt-1 block w-full px-3 py-2 border ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              } rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500`}
             />
+            {errors.name && (
+              <p className="text-red-600 text-sm mt-1">{errors.name.message}</p>
+            )}
           </div>
           <div>
             <label
@@ -140,16 +142,26 @@ const Contact: React.FC = () => {
             >
               Email
             </label>
-            <input
+            <InputField
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                  message: "Invalid email address",
+                },
+              })}
               type="email"
               name="email"
-              id="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
               placeholder="your.email@example.com"
+              className={`mt-1 block w-full px-3 py-2 border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500`}
             />
+            {errors.email && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div>
             <label
@@ -159,29 +171,46 @@ const Contact: React.FC = () => {
               Message
             </label>
             <textarea
+              {...register("message", {
+                required: "Message is required",
+                minLength: {
+                  value: 10,
+                  message: "Message must be at least 10 characters",
+                },
+              })}
               name="message"
               id="message"
-              value={formData.message}
-              onChange={handleChange}
-              required
               rows={5}
-              className="mt-1 block w-full min-h-[5rem] max-h-[5rem] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              className={`mt-1 block w-full min-h-[5rem] max-h-[5rem] px-3 py-2 border ${
+                errors.message ? "border-red-500" : "border-gray-300"
+              } rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500`}
               placeholder="Your message here..."
             />
+            {errors.message && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.message.message}
+              </p>
+            )}
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          {success && <p className="text-green-500 text-sm">{success}</p>}
           <button
             type="submit"
-            disabled={loading}
-            className={`w-full py-2 px-4 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            disabled={isLoading}
+            className="w-full bg-orange-400 text-white py-2 px-4 rounded-md hover:bg-orange-500 focus:outline-none disabled:opacity-50 flex items-center justify-center cursor-pointer"
           >
-            {loading ? "Sending..." : "Send Message"}
+            {isLoading ? (
+              <Loader2 className="animate-spin mr-2" size={20} />
+            ) : (
+              "Send Mesage"
+            )}
           </button>
         </form>
       </div>
+      <Toast
+        message={toastState.message}
+        success={toastState.success}
+        isOpen={toastState.isOpen}
+        onClose={closeToast}
+      />
     </div>
   );
 };

@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "../Component/InputField";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useLoginUserMutation } from "../query/server/LoginSignupSlice";
 import { useNavigate } from "react-router-dom";
 import { login } from "../store/authSlice";
 import useAppDispatch from "../Hooks/useAppDispatch";
+import Toast from "../Component/Toster";
 
 interface LoginForm {
   email: string;
@@ -29,36 +28,37 @@ const Login: React.FC = () => {
   const [passwordView, setPasswordView] = useState<boolean>(true);
   const [loginApi, { isLoading }] = useLoginUserMutation();
   const dispatch = useAppDispatch();
+  const [toastState, setToastState] = useState<{
+    isOpen: boolean;
+    message: string;
+    success: boolean;
+  }>({
+    isOpen: false,
+    message: "",
+    success: false,
+  });
+
+  const showToast = (message: string, success: boolean) => {
+    setToastState({ isOpen: true, message, success });
+  };
+
+  const closeToast = () => {
+    setToastState({ isOpen: false, message: "", success: false });
+  };
 
   const onSubmit = async (data: LoginForm) => {
     try {
       const res = await loginApi(data).unwrap();
       if (res.token) {
         dispatch(login({ token: res.token, name: res.name, email: res.email }));
-        toast.success(res.message, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "light",
-        });
-        navigate("/"); // Navigate to dashboard
+        showToast(res.message, true);
+        setTimeout(() => navigate("/"), 1000); // Navigate after toast duration
       }
     } catch (err: any) {
       console.error("Login failed:", err);
       const errorMessage =
         err.data?.message || "Login failed. Please check your credentials.";
-      toast.error(errorMessage, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "light",
-      });
+      showToast(errorMessage, false);
     }
   };
 
@@ -69,7 +69,7 @@ const Login: React.FC = () => {
           DermaAI Login
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div>
+          <div className=" space-y-2">
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
@@ -148,7 +148,12 @@ const Login: React.FC = () => {
           </a>
         </p>
       </div>
-      <ToastContainer />
+      <Toast
+        message={toastState.message}
+        success={toastState.success}
+        isOpen={toastState.isOpen}
+        onClose={closeToast}
+      />
     </div>
   );
 };
