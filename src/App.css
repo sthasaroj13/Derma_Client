@@ -4,6 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
+.body {
+  text: "14px";
+}
 
 .logo {
   height: 6em;
@@ -39,4 +42,9 @@
 
 .read-the-docs {
   color: #888;
+}
+.edu-sa-beginner {
+  font-family: "Edu SA Beginner", cursive;
+  font-weight: 400; /* choose from 400 to 700 */
+  font-style: normal;
 }

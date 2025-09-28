@@ -8,6 +8,7 @@ import AboutUs from "../Pages/AboutUs";
 import UserProfile from "../Pages/Userprofile";
 import Signup from "../Pages/Signup";
 import Contact from "../Pages/Contract";
+import AddClinic from "../Pages/AddClinic";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <UserProfile />,
+      },
+      {
+        path: "addclinic",
+        element: <AddClinic />,
       },
     ],
   },

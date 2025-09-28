@@ -118,7 +118,7 @@ const Login: React.FC = () => {
             <button
               type="button"
               onClick={() => setPasswordView(!passwordView)}
-              className="absolute top-10 right-3 -translate-y-1/2 text-gray-500 cursor-pointer"
+              className="absolute top-9 right-3 -translate-y-1/2 text-gray-500 cursor-pointer"
             >
               {passwordView ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>

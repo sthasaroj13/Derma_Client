@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between px-6 py-2 bg-white shadow-md sticky top-0 z-50">
+    <nav className="flex text-[17px] font-semibold items-center justify-between px-6 py-2 bg-white shadow-md sticky top-0 z-50">
       <div className="text-2xl font-bold text-orange-600">
         <Link to="/">Derma AI</Link>
       </div>
@@ -59,6 +59,18 @@ const Navbar: React.FC = () => {
             }
           >
             Dashboard
+          </NavLink>
+        )}
+        {isAuthenticated && (
+          <NavLink
+            to="/addclinic"
+            className={({ isActive }) =>
+              isActive
+                ? "hover:text-orange-600 transition text-orange-600"
+                : "text-gray-700 hover:text-orange-600 transition"
+            }
+          >
+            Add Clinic
           </NavLink>
         )}
         <NavLink
@@ -164,6 +176,18 @@ const Navbar: React.FC = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Dashboard
+              </NavLink>
+            )}
+            {isAuthenticated && (
+              <NavLink
+                to="/addclinic"
+                className={({ isActive }) =>
+                  isActive
+                    ? "hover:text-orange-600 transition text-orange-600"
+                    : "text-gray-700 hover:text-orange-600 transition"
+                }
+              >
+                Add Clinic
               </NavLink>
             )}
             <NavLink

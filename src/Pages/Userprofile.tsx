@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   useGetUserQuery,
   useUpdateUserMutation,
@@ -99,7 +99,7 @@ const UserProfile: React.FC = () => {
                 message: "Name must be at least 2 characters long",
               },
             })}
-            className="w-full border border-orange-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full border border-orange-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400 capitalize"
           />
           {errors.name && (
             <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>

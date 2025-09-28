@@ -1,4 +1,4 @@
-import { Camera, Dice1, ImageUp } from "lucide-react";
+import { Camera, ImageUp } from "lucide-react";
 import Webcam from "react-webcam";
 import GlobalModal from "./GlobalModal";
 

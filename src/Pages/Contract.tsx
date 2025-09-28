@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { Mail, Phone, MapPin, Clock, Loader2 } from "lucide-react";
 import InputField from "../Component/InputField";
 import Toast from "../Component/Toster";
@@ -8,7 +7,7 @@ import { useContactUserMutation } from "../query/server/ContactSlice";
 import type { ContactForm } from "../Types/contact";
 
 const Contact = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -70,35 +69,52 @@ const Contact = () => {
 
       {/* Contact Cards */}
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center items-center gap-4">
-          <Mail className="text-orange-500" size={24} />
+        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center  items-center gap-4">
           <div>
-            <h3 className="text-xl font-semibold text-gray-800 text-center">
-              Email Us
-            </h3>
-            <p className="text-gray-600 text-sm">dermaai44@gmail.com</p>
+            <div className=" pl-[3.5rem]">
+              <Mail className="text-orange-500 text-center " size={24} />
+            </div>
+            <div>
+              <h3 className="text-[16px] font-semibold text-gray-800 text-center">
+                Email Us
+              </h3>
+              <p className="text-gray-600 text-[14px] text-center">
+                dermaai44@gmail.com
+              </p>
+            </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center items-center gap-4">
-          <Phone className="text-orange-500" size={24} />
+
+        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center  items-center gap-4">
           <div>
-            <h3 className="text-xl font-semibold text-gray-800 text-center">
-              Call Us
-            </h3>
-            <p className="text-gray-600 text-sm">+977-1-1234567</p>
+            <div className=" pl-[2.5rem]">
+              <Phone className="text-orange-500" size={24} />
+            </div>
+            <div>
+              <h3 className="text-[16px] font-semibold text-gray-800 text-center">
+                Call Us
+              </h3>
+              <p className="text-gray-600  text-[14px]">+977-1-1234567</p>
+            </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center items-center gap-4">
-          <MapPin className="text-orange-500" size={24} />
+
+        <div className="bg-white p-6 rounded-lg shadow-md flex justify-center  items-center gap-4">
           <div>
-            <h3 className="text-xl font-semibold text-gray-800 text-center">
-              Visit Us
-            </h3>
-            <p className="text-gray-600 text-sm">Kathmandu, Nepal</p>
-            <p className="text-gray-600 text-sm mt-1">
-              <Clock className="inline mr-2" size={16} />
-              Sunday to Friday, 10 AM - 5 PM
-            </p>
+            <div className=" pl-[5rem]">
+              <MapPin className="text-orange-500" size={24} />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800 text-center">
+                Visit Us
+              </h3>
+              <p className="text-gray-600 mt-1">
+                <Clock className="inline mr-2 text-[12px]" size={16} />
+                <span className=" text-[.75rem]">
+                  Sunday to Friday, 10 AM - 5 PM
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
