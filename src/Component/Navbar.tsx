@@ -9,7 +9,9 @@ import useDropdown from "../hook/useDropdown";
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated, name } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, name, is_admin } = useAppSelector(
+    (state) => state.auth
+  );
   const { isOpen, toggle, closeDropdown, dropdownRef } = useDropdown();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -38,64 +40,83 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Desktop Navigation Links */}
-      <div className="hidden md:flex items-center gap-6">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive
-              ? "hover:text-orange-600 transition text-orange-600"
-              : "text-gray-700 hover:text-orange-600 transition"
-          }
-        >
-          Home
-        </NavLink>
-        {isAuthenticated && (
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) =>
-              isActive
-                ? "hover:text-orange-600 transition text-orange-600"
-                : "text-gray-700 hover:text-orange-600 transition"
-            }
-          >
-            Dashboard
-          </NavLink>
-        )}
-        {isAuthenticated && (
-          <NavLink
-            to="/addclinic"
-            className={({ isActive }) =>
-              isActive
-                ? "hover:text-orange-600 transition text-orange-600"
-                : "text-gray-700 hover:text-orange-600 transition"
-            }
-          >
-            Add Clinic
-          </NavLink>
-        )}
-        <NavLink
-          to="/aboutus"
-          className={({ isActive }) =>
-            isActive
-              ? "hover:text-orange-600 transition text-orange-600"
-              : "text-gray-700 hover:text-orange-600 transition"
-          }
-        >
-          About Us
-        </NavLink>
-        {isAuthenticated && (
-          <NavLink
-            to="/contract"
-            className={({ isActive }) =>
-              isActive
-                ? "hover:text-orange-600 transition text-orange-600"
-                : "text-gray-700 hover:text-orange-600 transition"
-            }
-          >
-            Contract
-          </NavLink>
-        )}
-      </div>
+
+      {is_admin ? (
+        <>
+          <div className="hidden md:flex items-center gap-6">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive
+                  ? "hover:text-orange-600 transition text-orange-600"
+                  : "text-gray-700 hover:text-orange-600 transition"
+              }
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/aboutus"
+              className={({ isActive }) =>
+                isActive
+                  ? "hover:text-orange-600 transition text-orange-600"
+                  : "text-gray-700 hover:text-orange-600 transition"
+              }
+            >
+              About Us
+            </NavLink>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="hidden md:flex items-center gap-6">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive
+                  ? "hover:text-orange-600 transition text-orange-600"
+                  : "text-gray-700 hover:text-orange-600 transition"
+              }
+            >
+              Home
+            </NavLink>
+            {isAuthenticated && (
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                  isActive
+                    ? "hover:text-orange-600 transition text-orange-600"
+                    : "text-gray-700 hover:text-orange-600 transition"
+                }
+              >
+                Dashboard
+              </NavLink>
+            )}
+
+            <NavLink
+              to="/aboutus"
+              className={({ isActive }) =>
+                isActive
+                  ? "hover:text-orange-600 transition text-orange-600"
+                  : "text-gray-700 hover:text-orange-600 transition"
+              }
+            >
+              About Us
+            </NavLink>
+            {isAuthenticated && (
+              <NavLink
+                to="/contract"
+                className={({ isActive }) =>
+                  isActive
+                    ? "hover:text-orange-600 transition text-orange-600"
+                    : "text-gray-700 hover:text-orange-600 transition"
+                }
+              >
+                Contract
+              </NavLink>
+            )}
+          </div>
+        </>
+      )}
 
       {/* Desktop Profile/Login Buttons */}
       <div className="hidden md:flex items-center gap-3">

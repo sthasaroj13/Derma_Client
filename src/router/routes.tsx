@@ -9,6 +9,8 @@ import UserProfile from "../Pages/Userprofile";
 import Signup from "../Pages/Signup";
 import Contact from "../Pages/Contract";
 import AddClinic from "../Pages/AddClinic";
+import NotFound from "../Pages/NotFound";
+import Admin from "../Pages/Admin/Admin";
 
 export const router = createBrowserRouter([
   {
@@ -48,5 +50,13 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
   },
 ]);

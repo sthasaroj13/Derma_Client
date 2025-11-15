@@ -8,6 +8,7 @@ interface LoginResponse {
   user: string;
   token: string;
   name: string;
+  is_admin: boolean;
 }
 const LoginSignupApi = createApi({
   reducerPath: "loginSignup",

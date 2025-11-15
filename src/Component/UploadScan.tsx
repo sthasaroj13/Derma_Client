@@ -29,7 +29,12 @@ const UploadScan: React.FC = () => {
 
     try {
       await predictSkin(formData).unwrap();
-      setShowResultModal(true);
+
+      setShowResultModal((prev) => {
+        const newState = !prev;
+        document.body.style.overflow = newState ? "hidden" : "auto";
+        return newState;
+      });
     } catch (err) {
       console.error("Prediction error:", err);
       setShowResultModal(true);
@@ -49,7 +54,7 @@ const UploadScan: React.FC = () => {
         <input
           type="file"
           accept="image/*"
-          className="mb-4 border border-orange-400 p-2 rounded-md"
+          className="mb-4 border border-orange-400 p-2 rounded-md cursor-pointer"
           onChange={(e) => {
             const file = e.target.files?.[0] || null;
             if (file) {
@@ -73,7 +78,7 @@ const UploadScan: React.FC = () => {
         onClose={() => setShowAuthModal(false)}
         onLogin={() => navigate("/login")}
       />
-      <Modal isOpen={showResultModal} onClose={() => setShowResultModal(false)}>
+      <Modal isOpen={showResultModal} onClose={() => handleAnalysis()}>
         {imagePreview && (
           <div className="pt-3.5">
             <img

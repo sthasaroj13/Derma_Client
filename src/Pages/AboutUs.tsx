@@ -1,17 +1,10 @@
 import React from "react";
 import Footer from "../Component/home/Footer";
 
-const teamMembers = [
-  { name: "Saroj Shrestha", role: "Founder & AI Specialist" },
-  { name: "Bodhan Dhakal", role: "Lead Developer" },
-  { name: "Anita Rai", role: "UI/UX Designer" },
-];
-
 const AboutUs: React.FC = () => {
   return (
     <div className="min-h-screen bg-orange-50 flex flex-col">
       <main className="flex-grow max-w-5xl mx-auto px-6 py-12">
-        {/* Hero Section */}
         <section className="text-center mb-16">
           <h1 className="text-4xl font-bold text-orange-600 mb-4">
             About Derma AI
@@ -23,7 +16,6 @@ const AboutUs: React.FC = () => {
           </p>
         </section>
 
-        {/* Our Story */}
         <section className="mb-16">
           <h2 className="text-3xl font-semibold text-orange-600 mb-4">
             Our Story
@@ -36,9 +28,7 @@ const AboutUs: React.FC = () => {
             healthy, glowing skin.
           </p>
         </section>
-
-        {/* Team */}
-        <section className="mb-16">
+        {/* <section className="mb-16">
           <h2 className="text-3xl font-semibold text-orange-600 mb-8 text-center">
             Meet Our Team
           </h2>
@@ -61,11 +51,11 @@ const AboutUs: React.FC = () => {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
 
         {/* Our Values */}
-        <section className="mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl font-semibold text-orange-600 mb-6 text-center">
+        <section className="mb-16  mx-auto">
+          <h2 className="text-3xl font-semibold text-orange-600 mb-6 text-start">
             Our Values
           </h2>
           <ul className="list-disc list-inside text-orange-900 space-y-2 text-lg">
